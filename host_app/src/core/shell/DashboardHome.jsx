@@ -28,6 +28,20 @@ export function DashboardHome({ schoolContext }) {
       </section>
 
       <Card>
+        <h3 className="text-lg font-bold text-slate-900">Active teacher account</h3>
+        <p className="mt-2 text-sm text-slate-600">
+          The host is now simulating teacher-scoped accounts. Each account can have different classroom access and enabled apps.
+        </p>
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4">
+          <p className="font-bold text-slate-900">{schoolContext.currentUser.name}</p>
+          <p className="text-sm text-slate-600">{schoolContext.currentUser.email}</p>
+          <p className="mt-2 text-sm text-slate-600">
+            Enabled apps: {(schoolContext.teacherProfile.enabledModules || []).join(', ') || 'None'}
+          </p>
+        </div>
+      </Card>
+
+      <Card>
         <h3 className="text-lg font-bold text-slate-900">What this host owns</h3>
         <ul className="mt-3 space-y-2 text-sm text-slate-600">
           <li>Shared navigation and layout</li>

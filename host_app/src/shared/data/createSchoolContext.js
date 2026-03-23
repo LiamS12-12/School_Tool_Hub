@@ -4,6 +4,7 @@ import {
   createSchoolSettings,
   createStudent,
   createUser,
+  ROLE_ADMIN,
   ROLE_TEACHER
 } from './entities';
 import { getVisibleClassrooms, getVisibleStudents } from '../permissions/schoolPermissions';
@@ -20,8 +21,29 @@ const schoolSettings = createSchoolSettings({
 });
 
 const users = [
-  createUser({ id: 'teacher-1', name: 'Ms. Rivera', role: ROLE_TEACHER, email: 'rivera@evergreen-elementary.edu' }),
-  createUser({ id: 'teacher-2', name: 'Mr. Patel', role: ROLE_TEACHER, email: 'patel@evergreen-elementary.edu' })
+  createUser({
+    id: 'admin-1',
+    name: 'Principal Chen',
+    role: ROLE_ADMIN,
+    email: 'chen@evergreen-elementary.edu',
+    enabledModules: ['classroom-economy', 'classroom-timer']
+  }),
+  createUser({
+    id: 'teacher-1',
+    name: 'Ms. Rivera',
+    role: ROLE_TEACHER,
+    email: 'rivera@evergreen-elementary.edu',
+    enabledModules: ['classroom-economy', 'classroom-timer'],
+    defaultClassroomId: 'class-1'
+  }),
+  createUser({
+    id: 'teacher-2',
+    name: 'Mr. Patel',
+    role: ROLE_TEACHER,
+    email: 'patel@evergreen-elementary.edu',
+    enabledModules: ['classroom-timer'],
+    defaultClassroomId: 'class-2'
+  })
 ];
 
 const classrooms = [
@@ -38,6 +60,8 @@ const students = [
 export function createSchoolContext(currentUserId = 'teacher-1') {
   const currentUser = users.find((user) => user.id === currentUserId) || users[0];
   const classroomsById = Object.fromEntries(classrooms.map((classroom) => [classroom.id, classroom]));
+  const visibleClassrooms = getVisibleClassrooms(currentUser, classrooms);
+  const visibleStudents = getVisibleStudents(currentUser, students, classroomsById);
 
   return {
     school,
@@ -47,7 +71,11 @@ export function createSchoolContext(currentUserId = 'teacher-1') {
     classrooms,
     students,
     classroomsById,
-    visibleClassrooms: getVisibleClassrooms(currentUser, classrooms),
-    visibleStudents: getVisibleStudents(currentUser, students, classroomsById)
+    visibleClassrooms,
+    visibleStudents,
+    teacherProfile: {
+      enabledModules: currentUser.enabledModules || [],
+      defaultClassroomId: currentUser.defaultClassroomId || visibleClassrooms[0]?.id || null
+    }
   };
 }

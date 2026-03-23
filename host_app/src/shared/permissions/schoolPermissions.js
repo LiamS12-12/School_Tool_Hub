@@ -31,3 +31,13 @@ export function getVisibleStudents(user, students, classroomsById) {
 export function canManageHostSettings(user) {
   return isAdmin(user);
 }
+
+export function canAccessModule(user, module) {
+  if (!user || !module) return false;
+  if (isAdmin(user)) return true;
+  return (user.enabledModules || []).includes(module.id);
+}
+
+export function getEnabledModules(user, modules) {
+  return modules.filter((module) => canAccessModule(user, module));
+}

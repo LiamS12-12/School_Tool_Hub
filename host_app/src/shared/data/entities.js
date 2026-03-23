@@ -9,12 +9,14 @@ export function createSchool({ id, name, shortName = name }) {
   };
 }
 
-export function createUser({ id, name, role, email = '' }) {
+export function createUser({ id, name, role, email = '', enabledModules = [], defaultClassroomId = null }) {
   return {
     id,
     name,
     role,
     email,
+    enabledModules,
+    defaultClassroomId,
     isActive: true
   };
 }

@@ -1,18 +1,37 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Card } from '../../shared/ui/Card';
 import { SectionHeader } from '../../shared/ui/SectionHeader';
 import { canManageClassroom } from '../../shared/permissions/schoolPermissions';
 import { Button } from '../../shared/ui/Button';
 import { classroomEconomyData } from './economyData';
+import { loadStoredValue, saveStoredValue } from '../../shared/utils/localStorage';
+
+function createInitialModuleState(defaultClassroomId) {
+  return {
+    selectedClassroomId: defaultClassroomId || null,
+    accounts: classroomEconomyData.accounts,
+    storeByClassroom: classroomEconomyData.storeItems,
+    transactionsByClassroom: classroomEconomyData.transactions
+  };
+}
 
 export function ClassroomEconomyModule({ schoolContext }) {
   const teacherClassrooms = schoolContext.visibleClassrooms;
-  const [selectedClassroomId, setSelectedClassroomId] = useState(teacherClassrooms[0]?.id || null);
-  const [accounts, setAccounts] = useState(classroomEconomyData.accounts);
-  const [storeByClassroom, setStoreByClassroom] = useState(classroomEconomyData.storeItems);
-  const [transactionsByClassroom, setTransactionsByClassroom] = useState(classroomEconomyData.transactions);
+  const defaultClassroomId = schoolContext.teacherProfile.defaultClassroomId || teacherClassrooms[0]?.id || null;
+  const classroomEconomyStorageKey = `school-tool-hub:classroom-economy:${schoolContext.currentUser.id}`;
+  const [persistedModuleState, setPersistedModuleState] = useState(() =>
+    loadStoredValue(classroomEconomyStorageKey, createInitialModuleState(defaultClassroomId))
+  );
+  const { selectedClassroomId, accounts, storeByClassroom, transactionsByClassroom } = persistedModuleState;
   const [newRewardName, setNewRewardName] = useState('');
   const [newRewardCost, setNewRewardCost] = useState('');
+
+  const updateModuleState = (updates) => {
+    setPersistedModuleState((prev) => ({
+      ...prev,
+      ...updates
+    }));
+  };
 
   const selectedClassroom = useMemo(
     () => teacherClassrooms.find((classroom) => classroom.id === selectedClassroomId) || teacherClassrooms[0] || null,
@@ -48,6 +67,20 @@ export function ClassroomEconomyModule({ schoolContext }) {
     ? Math.min(100, Math.round((totalClassBalance / classroomGoal.targetAmount) * 100))
     : 0;
 
+  useEffect(() => {
+    setPersistedModuleState(loadStoredValue(classroomEconomyStorageKey, createInitialModuleState(defaultClassroomId)));
+  }, [classroomEconomyStorageKey, defaultClassroomId]);
+
+  useEffect(() => {
+    if (!selectedClassroom && teacherClassrooms[0]?.id) {
+      updateModuleState({ selectedClassroomId: teacherClassrooms[0].id });
+    }
+  }, [selectedClassroom, teacherClassrooms]);
+
+  useEffect(() => {
+    saveStoredValue(classroomEconomyStorageKey, persistedModuleState);
+  }, [classroomEconomyStorageKey, persistedModuleState]);
+
   const addTransaction = (studentId, amount, reason) => {
     if (!selectedClassroom) return;
 
@@ -59,27 +92,30 @@ export function ClassroomEconomyModule({ schoolContext }) {
       timestamp: new Date().toISOString()
     };
 
-    setAccounts((prev) => {
-      const currentAccount = prev[studentId] || {
-        balance: 0,
-        jobTitle: 'Unassigned',
-        weeklySalary: 0,
-        savingsGoal: null
-      };
+    const currentAccount = accounts[studentId] || {
+      balance: 0,
+      jobTitle: 'Unassigned',
+      weeklySalary: 0,
+      savingsGoal: null
+    };
 
-      return {
-        ...prev,
-        [studentId]: {
-          ...currentAccount,
-          balance: currentAccount.balance + amount
-        }
-      };
+    const nextAccounts = {
+      ...accounts,
+      [studentId]: {
+        ...currentAccount,
+        balance: currentAccount.balance + amount
+      }
+    };
+
+    const nextTransactionsByClassroom = {
+      ...transactionsByClassroom,
+      [selectedClassroom.id]: [transaction, ...(transactionsByClassroom[selectedClassroom.id] || [])]
+    };
+
+    updateModuleState({
+      accounts: nextAccounts,
+      transactionsByClassroom: nextTransactionsByClassroom
     });
-
-    setTransactionsByClassroom((prev) => ({
-      ...prev,
-      [selectedClassroom.id]: [transaction, ...(prev[selectedClassroom.id] || [])]
-    }));
   };
 
   const runPayday = () => {
@@ -99,10 +135,12 @@ export function ClassroomEconomyModule({ schoolContext }) {
       cost: Number(newRewardCost)
     };
 
-    setStoreByClassroom((prev) => ({
-      ...prev,
-      [selectedClassroom.id]: [...(prev[selectedClassroom.id] || []), reward]
-    }));
+    updateModuleState({
+      storeByClassroom: {
+        ...storeByClassroom,
+        [selectedClassroom.id]: [...(storeByClassroom[selectedClassroom.id] || []), reward]
+      }
+    });
 
     setNewRewardName('');
     setNewRewardCost('');
@@ -123,7 +161,7 @@ export function ClassroomEconomyModule({ schoolContext }) {
             {teacherClassrooms.map((classroom) => (
               <Button
                 key={classroom.id}
-                onClick={() => setSelectedClassroomId(classroom.id)}
+                onClick={() => updateModuleState({ selectedClassroomId: classroom.id })}
                 variant={selectedClassroom?.id === classroom.id ? 'primary' : 'secondary'}
               >
                 {classroom.name}

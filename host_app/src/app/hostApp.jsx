@@ -7,15 +7,41 @@ import { createSchoolContext } from '../shared/data/createSchoolContext';
 import { AppShellPanel } from '../shared/ui/AppShellPanel';
 import { tokens } from '../shared/design/tokens';
 import { getEnabledModules } from '../shared/permissions/schoolPermissions';
+import { loadStoredValue, saveStoredValue } from '../shared/utils/localStorage';
+
+const HOST_APP_STORAGE_KEY = 'school-tool-hub:host-app';
 
 export default function HostApp() {
-  const [currentUserId, setCurrentUserId] = useState('teacher-1');
-  const [activeModuleId, setActiveModuleId] = useState(null);
+  const [persistedHostState, setPersistedHostState] = useState(() =>
+    loadStoredValue(HOST_APP_STORAGE_KEY, {
+      currentUserId: 'teacher-1',
+      activeModuleId: null
+    })
+  );
+  const { currentUserId, activeModuleId } = persistedHostState;
   const schoolContext = useMemo(() => createSchoolContext(currentUserId), [currentUserId]);
   const availableModules = useMemo(
     () => getEnabledModules(schoolContext.currentUser, moduleRegistry),
     [schoolContext.currentUser]
   );
+
+  const setCurrentUserId = (nextUserId) => {
+    setPersistedHostState((prev) => ({
+      ...prev,
+      currentUserId: nextUserId
+    }));
+  };
+
+  const setActiveModuleId = (nextModuleId) => {
+    setPersistedHostState((prev) => ({
+      ...prev,
+      activeModuleId: nextModuleId
+    }));
+  };
+
+  useEffect(() => {
+    saveStoredValue(HOST_APP_STORAGE_KEY, persistedHostState);
+  }, [persistedHostState]);
 
   useEffect(() => {
     if (activeModuleId && !availableModules.some((module) => module.id === activeModuleId)) {

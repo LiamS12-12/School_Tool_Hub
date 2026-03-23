@@ -4,6 +4,8 @@ import { AppSidebar } from '../core/shell/AppSidebar';
 import { DashboardHome } from '../core/shell/DashboardHome';
 import { moduleRegistry } from '../modules/moduleRegistry';
 import { createSchoolContext } from '../shared/data/createSchoolContext';
+import { AppShellPanel } from '../shared/ui/AppShellPanel';
+import { tokens } from '../shared/design/tokens';
 
 export default function HostApp() {
   const [activeModuleId, setActiveModuleId] = useState(null);
@@ -17,7 +19,7 @@ export default function HostApp() {
   const ActiveScreen = activeModule?.screen || DashboardHome;
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900">
+    <div className={`min-h-screen ${tokens.color.background} ${tokens.color.text}`}>
       <AppHeader school={schoolContext.school} currentUser={schoolContext.currentUser} />
       <div className="mx-auto flex w-full max-w-7xl gap-6 px-4 py-6 md:px-6">
         <AppSidebar
@@ -25,9 +27,9 @@ export default function HostApp() {
           activeModuleId={activeModuleId}
           onSelectModule={setActiveModuleId}
         />
-        <main className="min-h-[70vh] flex-1 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+        <AppShellPanel className="min-h-[70vh] flex-1">
           <ActiveScreen schoolContext={schoolContext} />
-        </main>
+        </AppShellPanel>
       </div>
     </div>
   );

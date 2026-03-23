@@ -1,33 +1,33 @@
 import React from 'react';
+import { Card } from '../../shared/ui/Card';
+import { SectionHeader } from '../../shared/ui/SectionHeader';
+import { tokens } from '../../shared/design/tokens';
 
 export function DashboardHome({ schoolContext }) {
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-sm font-bold uppercase tracking-[0.2em] text-sky-600">Platform MVP</p>
-        <h2 className="mt-2 text-3xl font-extrabold text-slate-900">School host shell</h2>
-        <p className="mt-2 max-w-2xl text-slate-600">
-          This is the first platform shell for your single-school modular app system. It will eventually host
-          classroom tools like Classroom Economy inside one shared experience.
-        </p>
-      </div>
+      <SectionHeader
+        eyebrow="Platform MVP"
+        title="School host shell"
+        description="This is the first platform shell for your single-school modular app system. It will eventually host classroom tools like Classroom Economy inside one shared experience."
+      />
 
       <section className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Users</p>
+        <Card className="bg-slate-50">
+          <p className={`${tokens.typography.eyebrow} ${tokens.color.textSoft}`}>Users</p>
           <p className="mt-2 text-3xl font-extrabold text-slate-900">{schoolContext.users.length}</p>
-        </div>
-        <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Classrooms</p>
+        </Card>
+        <Card className="bg-slate-50">
+          <p className={`${tokens.typography.eyebrow} ${tokens.color.textSoft}`}>Classrooms</p>
           <p className="mt-2 text-3xl font-extrabold text-slate-900">{schoolContext.classrooms.length}</p>
-        </div>
-        <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Visible Students</p>
+        </Card>
+        <Card className="bg-slate-50">
+          <p className={`${tokens.typography.eyebrow} ${tokens.color.textSoft}`}>Visible Students</p>
           <p className="mt-2 text-3xl font-extrabold text-slate-900">{schoolContext.visibleStudents.length}</p>
-        </div>
+        </Card>
       </section>
 
-      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5">
+      <Card>
         <h3 className="text-lg font-bold text-slate-900">What this host owns</h3>
         <ul className="mt-3 space-y-2 text-sm text-slate-600">
           <li>Shared navigation and layout</li>
@@ -35,22 +35,22 @@ export function DashboardHome({ schoolContext }) {
           <li>Module registration and app launching</li>
           <li>Role-aware access boundaries</li>
         </ul>
-      </section>
+      </Card>
 
-      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5">
+      <Card>
         <h3 className="text-lg font-bold text-slate-900">Current teacher scope</h3>
         <p className="mt-2 text-sm text-slate-600">
           The current signed-in user should only see classrooms and students within their allowed scope.
         </p>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {schoolContext.visibleClassrooms.map((classroom) => (
-            <div key={classroom.id} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <div key={classroom.id} className={`rounded-xl border ${tokens.color.border} ${tokens.color.surfaceMuted} px-4 py-3`}>
               <p className="font-bold text-slate-900">{classroom.name}</p>
               <p className="text-sm text-slate-600">Grade {classroom.gradeLevel}</p>
             </div>
           ))}
         </div>
-      </section>
+      </Card>
     </div>
   );
 }

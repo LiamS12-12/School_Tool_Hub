@@ -39,5 +39,32 @@ export const classroomEconomyData = {
       { id: 'reward-4', name: 'Read to the Class', cost: 40 },
       { id: 'reward-5', name: 'Game Time', cost: 60 }
     ]
+  },
+  transactions: {
+    'class-1': [
+      {
+        id: 'tx-1',
+        studentId: 'student-1',
+        amount: 10,
+        reason: 'Weekly Salary: Plant Monitor',
+        timestamp: '2026-03-20T15:00:00.000Z'
+      },
+      {
+        id: 'tx-2',
+        studentId: 'student-2',
+        amount: -15,
+        reason: 'Bought Free Drawing Time',
+        timestamp: '2026-03-21T15:00:00.000Z'
+      }
+    ],
+    'class-2': [
+      {
+        id: 'tx-3',
+        studentId: 'student-3',
+        amount: 8,
+        reason: 'Weekly Salary: Tech Helper',
+        timestamp: '2026-03-20T15:00:00.000Z'
+      }
+    ]
   }
 };

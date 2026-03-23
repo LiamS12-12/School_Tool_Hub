@@ -1,0 +1,79 @@
+"""Role: You are an expert Full-Stack Developer and UI/UX Designer. Build a "Classroom Economy Bank" web application for a 3rd-grade classroom.
+Core System Architecture:
+Multi-Class Management: Teacher dashboard to create, edit, archive, or delete multiple classes.
+Parent Transparency: Generate a unique "Parent Code + PIN" for each student for read-only transaction access.
+Economy Logic: * Transactions: Ability to add/take away money for individuals or the whole class.
+Recurring Payments: A "Job System" where assigned students receive a weekly salary automatically.
+Real-World Fees: A "Friday Desk Rent" ($10) deduction option.
+Incentives: An "Interest" system where students with >50% of their savings goal earn a +2 point weekly bonus.
+User Views & Features:
+A. Teacher View (The Control Tower)
+Classes Page: Manage class lists and "Quick Print" student QR/PIN sheets.
+Individual Class Page: Grid of student cards. Includes "Whole Class Award" button and "Class Edit" bar.
+Bank Manager: Create "Quick Action" buttons for:
+Positive: Helper (+5), On Task (+2), Kindness (+10), Participation (+3), Desk Check (+5).
+Negative: Disruption (-5), Materials Fee (-3), Late to Line (-2).
+Store Creator: Add items kids can buy (e.g., Sit with a Friend, Bring a Stuffed Animal).
+B. Student View (The Bank)
+Login: Frictionless login via Name selection and PIN (or QR scan simulation).
+Dashboard: Large display of current balance and a "Progress Bar" toward a custom "Savings Goal."
+Avatars: Students can select an Emoji avatar or upload a photo.
+Community Goal: A "Class-Wide Progress Bar" for a group reward (e.g., Pajama Day).
+C. Parent View (Read-Only)
+Simple login via Parent Code to see a time-stamped log of their child’s behavior and spending.
+Design Aesthetic: * Bright, kid-friendly colors (soft blues, greens, yellows).
+Large, accessible buttons for 8-9-year-olds.
+Secure, local-storage-based prototype (no external database needed for this version).
+Output: Please generate the complete HTML, CSS, and JavaScript code in one functional application within this canvas.
+
+Why this works for your classroom:
+The "Desk Rent" & "Interest": These introduce the "Real World" concepts we discussed, teaching kids that money isn't just for spending—it's for managing.
+Frictionless Access: By specifying "No sign-up needed" for parents, you're removing the biggest hurdle to parent engagement.
+Community Goal: This turns the economy from a competition into a collaboration.
+Classroom Economy App: Architecture Breakdown
+🔄 Reusable UI Components
+These components are designed to be used across multiple different pages or sections of the app.
+ActionModal
+Function: A flexible, reusable popup dialog used for confirmations, alerts, or destructive actions (like deleting an item).
+Features: Supports different themes (danger, success, primary), custom icons, and customizable confirm/cancel buttons.
+RealQrScanner
+Function: Integrates the html5-qrcode library to access the device camera and scan student QR codes.
+Features: Handles camera permissions, loads the external script asynchronously, and passes the decoded QR text back to the parent component.
+👩‍🏫 Teacher Dashboard Components
+These components make up the tools available to the teacher to manage the classroom economy.
+TabSettings
+Function: The settings panel for managing student access to the bank.
+Features: Allows the teacher to set automatic "School Hours" (bank opens/closes automatically) and provides a "Manual Override" toggle switch to instantly lock or unlock the bank.
+TeacherStoreManager
+Function: Manages the inventory of the classroom store where students spend their virtual money.
+Features: Displays current items, allows deletion, and features an AI Idea Generator (powered by Gemini) that automatically dreams up and adds new, creative, non-monetary rewards to the store.
+AddStudentModal
+Function: A popup form for adding a new student to the class roster.
+Features: Captures the student's name, an optional PIN for login, and allows them to pick an emoji avatar. It automatically generates secure parent codes behind the scenes.
+PrintOptionsModal
+Function: A menu that asks the teacher what type of document they want to print.
+Features: Offers two choices: "Student Debit Cards" or a "Teacher Roster List".
+PrintView
+Function: A dedicated, un-styled (print-optimized) screen that formats data perfectly for physical printing and automatically triggers the browser's window.print() dialog.
+Features: * Cards Mode: Generates cut-out debit cards for each student featuring their name, avatar, PIN, and a generated QR code.
+List Mode: Generates a secure table listing all students, their PINs, and their Parent access codes.
+TeacherStudentCard
+Function: A visual tile representing a single student on the teacher's main dashboard.
+Features: Displays the student's avatar, name, and current balance. When clicked (becomes isActive), it expands to reveal transaction controls (adding/subtracting money) based on the addTransaction prop.
+🎓 Student View Components
+BankClosedScreen
+Function: An access-denial screen shown to students.
+Features: Displays a lock icon and a dynamic reason message (e.g., "School bank hours are from 8:00 AM to 3:00 PM" or "Your teacher has manually locked the bank") preventing login.
+⚙️ Core Logic & Helper Functions
+These are the invisible functions powering the app's behavior.
+askGemini(prompt)
+Function: Handles the API call to the Gemini AI model. Includes a retry mechanism (exponential backoff) in case of network failures and provides fallback hardcoded data if no API key is present.
+checkBankStatus(settings)
+Function: Calculates whether a student is allowed to log in right now. It checks the teacher's manual lock status first, and then compares the current local time against the teacher's configured open/close schedule.
+formatTime(timeStr)
+Function: Converts 24-hour time strings (e.g., "15:00") into readable local time formats (e.g., "3:00 PM").
+generateId(), generateParentCode(), generateParentPin()
+Function: Utility functions that generate random, unique alphanumeric strings for database IDs and secure parent access credentials.
+useScript(url)
+Function: A custom React Hook that safely loads external JavaScript files (used to load the QR scanner library on demand without bloating the initial app load).
+

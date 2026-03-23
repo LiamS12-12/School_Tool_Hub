@@ -1,9 +1,8 @@
 import React from 'react';
 
 function ClassroomEconomyPlaceholder({ schoolContext }) {
-  const teacherClassrooms = schoolContext.classrooms.filter(
-    (classroom) => classroom.teacherId === schoolContext.currentUser.id
-  );
+  const teacherClassrooms = schoolContext.visibleClassrooms;
+  const teacherStudents = schoolContext.visibleStudents;
 
   return (
     <div className="space-y-6">
@@ -24,6 +23,17 @@ function ClassroomEconomyPlaceholder({ schoolContext }) {
           {teacherClassrooms.map((classroom) => (
             <li key={classroom.id} className="rounded-xl border border-slate-200 bg-white px-4 py-3">
               {classroom.name}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
+        <h3 className="text-lg font-bold text-slate-900">Visible students</h3>
+        <ul className="mt-4 space-y-2 text-sm text-slate-700">
+          {teacherStudents.map((student) => (
+            <li key={student.id} className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+              {student.displayName}
             </li>
           ))}
         </ul>

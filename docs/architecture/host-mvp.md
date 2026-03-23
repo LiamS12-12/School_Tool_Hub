@@ -15,6 +15,32 @@ The repo now has two tracks:
 - teacher-scoped defaults
 - place for shared design system and shared data models
 
+## Shared Host Data
+
+The host now has an initial shared data backbone with:
+
+- school
+- school settings
+- users
+- classrooms
+- students
+
+The host also computes:
+
+- `visibleClassrooms`
+- `visibleStudents`
+
+These are teacher-scoped by default and are derived through simple permission helpers.
+
+## Permissions
+
+The first permission model is intentionally small:
+
+- admins can view all classrooms and students
+- teachers can view only classrooms they own
+- teachers can view only students in classrooms they own
+- host settings should eventually be admin-only
+
 ## MVP Module Pattern
 
 Each module should eventually plug into the host through:

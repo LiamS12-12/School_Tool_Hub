@@ -3,10 +3,11 @@ import { AppHeader } from '../core/shell/AppHeader';
 import { AppSidebar } from '../core/shell/AppSidebar';
 import { DashboardHome } from '../core/shell/DashboardHome';
 import { moduleRegistry } from '../modules/moduleRegistry';
-import { schoolContext } from '../shared/data/mockSchoolContext';
+import { createSchoolContext } from '../shared/data/createSchoolContext';
 
 export default function HostApp() {
   const [activeModuleId, setActiveModuleId] = useState(null);
+  const schoolContext = useMemo(() => createSchoolContext('teacher-1'), []);
 
   const activeModule = useMemo(
     () => moduleRegistry.find((module) => module.id === activeModuleId) || null,

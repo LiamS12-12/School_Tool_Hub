@@ -14,16 +14,16 @@ export function DashboardHome({ schoolContext }) {
 
       <section className="grid gap-4 md:grid-cols-3">
         <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Teachers</p>
-          <p className="mt-2 text-3xl font-extrabold text-slate-900">{schoolContext.teachers.length}</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Users</p>
+          <p className="mt-2 text-3xl font-extrabold text-slate-900">{schoolContext.users.length}</p>
         </div>
         <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Classrooms</p>
           <p className="mt-2 text-3xl font-extrabold text-slate-900">{schoolContext.classrooms.length}</p>
         </div>
         <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Students</p>
-          <p className="mt-2 text-3xl font-extrabold text-slate-900">{schoolContext.students.length}</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Visible Students</p>
+          <p className="mt-2 text-3xl font-extrabold text-slate-900">{schoolContext.visibleStudents.length}</p>
         </div>
       </section>
 
@@ -35,6 +35,21 @@ export function DashboardHome({ schoolContext }) {
           <li>Module registration and app launching</li>
           <li>Role-aware access boundaries</li>
         </ul>
+      </section>
+
+      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5">
+        <h3 className="text-lg font-bold text-slate-900">Current teacher scope</h3>
+        <p className="mt-2 text-sm text-slate-600">
+          The current signed-in user should only see classrooms and students within their allowed scope.
+        </p>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          {schoolContext.visibleClassrooms.map((classroom) => (
+            <div key={classroom.id} className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <p className="font-bold text-slate-900">{classroom.name}</p>
+              <p className="text-sm text-slate-600">Grade {classroom.gradeLevel}</p>
+            </div>
+          ))}
+        </div>
       </section>
     </div>
   );

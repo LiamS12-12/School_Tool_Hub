@@ -3,9 +3,13 @@ import { AppHeader } from '../core/shell/AppHeader';
 import { AppSidebar } from '../core/shell/AppSidebar';
 import { DashboardHome } from '../core/shell/DashboardHome';
 import { moduleRegistry } from '../modules/moduleRegistry';
-import { createSchoolContext } from '../shared/data/createSchoolContext';
+import {
+  createSchoolContext,
+  initialUsers,
+  initialClassrooms,
+  initialStudents,
+} from '../shared/data/createSchoolContext';
 import { AppShellPanel } from '../shared/ui/AppShellPanel';
-import { tokens } from '../shared/design/tokens';
 import { getEnabledModules } from '../shared/permissions/schoolPermissions';
 import { loadStoredValue, saveStoredValue } from '../shared/utils/localStorage';
 
@@ -15,11 +19,27 @@ export default function HostApp() {
   const [persistedHostState, setPersistedHostState] = useState(() =>
     loadStoredValue(HOST_APP_STORAGE_KEY, {
       currentUserId: 'teacher-1',
-      activeModuleId: null
+      activeModuleId: null,
     })
   );
+
+  const [users] = useState(initialUsers);
+  const [classrooms] = useState(initialClassrooms);
+  const [students, setStudents] = useState(initialStudents);
+
   const { currentUserId, activeModuleId } = persistedHostState;
-  const schoolContext = useMemo(() => createSchoolContext(currentUserId), [currentUserId]);
+
+  const schoolContext = useMemo(
+    () =>
+      createSchoolContext({
+        currentUserId,
+        users,
+        classrooms,
+        students,
+      }),
+    [currentUserId, users, classrooms, students]
+  );
+
   const availableModules = useMemo(
     () => getEnabledModules(schoolContext.currentUser, moduleRegistry),
     [schoolContext.currentUser]
@@ -28,15 +48,32 @@ export default function HostApp() {
   const setCurrentUserId = (nextUserId) => {
     setPersistedHostState((prev) => ({
       ...prev,
-      currentUserId: nextUserId
+      currentUserId: nextUserId,
     }));
   };
 
   const setActiveModuleId = (nextModuleId) => {
     setPersistedHostState((prev) => ({
       ...prev,
-      activeModuleId: nextModuleId
+      activeModuleId: nextModuleId,
     }));
+  };
+
+  const addStudentToClassroom = ({ firstName, lastName, classroomId }) => {
+    const cleanFirstName = firstName.trim();
+    const cleanLastName = lastName.trim();
+
+    if (!cleanFirstName || !classroomId) return;
+
+    setStudents((prev) => [
+      ...prev,
+      {
+        id: `student-${Date.now()}`,
+        firstName: cleanFirstName,
+        lastName: cleanLastName,
+        classroomId,
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -44,7 +81,10 @@ export default function HostApp() {
   }, [persistedHostState]);
 
   useEffect(() => {
-    if (activeModuleId && !availableModules.some((module) => module.id === activeModuleId)) {
+    if (
+      activeModuleId &&
+      !availableModules.some((module) => module.id === activeModuleId)
+    ) {
       setActiveModuleId(null);
     }
   }, [activeModuleId, availableModules]);
@@ -57,22 +97,29 @@ export default function HostApp() {
   const ActiveScreen = activeModule?.screen || DashboardHome;
 
   return (
-    <div className={`min-h-screen ${tokens.color.background} ${tokens.color.text}`}>
+    <div className="min-h-screen bg-slate-100 text-slate-900">
       <AppHeader
         school={schoolContext.school}
         currentUser={schoolContext.currentUser}
-        users={schoolContext.users}
+        users={users}
         onSwitchUser={setCurrentUserId}
       />
-      <div className="mx-auto flex w-full max-w-7xl gap-6 px-4 py-6 md:px-6">
+
+      <div className="mx-auto flex max-w-7xl gap-6 px-6 py-6">
         <AppSidebar
           modules={availableModules}
           activeModuleId={activeModuleId}
           onSelectModule={setActiveModuleId}
         />
-        <AppShellPanel className="min-h-[70vh] flex-1">
-          <ActiveScreen schoolContext={schoolContext} />
-        </AppShellPanel>
+
+        <main className="min-w-0 flex-1">
+          <AppShellPanel>
+            <ActiveScreen
+              schoolContext={schoolContext}
+              onAddStudent={addStudentToClassroom}
+            />
+          </AppShellPanel>
+        </main>
       </div>
     </div>
   );

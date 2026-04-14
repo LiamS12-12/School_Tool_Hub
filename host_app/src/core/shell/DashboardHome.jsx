@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 
-export function DashboardHome({ schoolContext, onAddStudent }) {
+export function DashboardHome({ schoolContext, onAddStudent, theme }) {
   const visibleClassrooms = schoolContext?.visibleClassrooms ?? [];
   const visibleStudents = schoolContext?.visibleStudents ?? [];
   const currentUser = schoolContext?.currentUser ?? null;
@@ -38,8 +38,8 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
     <div style={{ padding: '8px' }}>
       <div
         style={{
-          background: 'linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%)',
-          border: '1px solid #dbeafe',
+          background: theme.cardBg,
+          border: `1px solid ${theme.border}`,
           borderRadius: '24px',
           padding: '28px',
           marginBottom: '24px',
@@ -52,7 +52,7 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
             fontWeight: 700,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: '#64748b',
+            color: theme.mutedText,
           }}
         >
           Dashboard
@@ -62,7 +62,7 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
           style={{
             margin: '8px 0 10px 0',
             fontSize: '32px',
-            color: '#0f172a',
+            color: theme.text,
           }}
         >
           {currentUser?.name}
@@ -72,7 +72,7 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
           style={{
             margin: 0,
             fontSize: '15px',
-            color: '#334155',
+            color: theme.mutedText,
           }}
         >
           {isAdmin
@@ -91,46 +91,52 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
       >
         <div
           style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
+            background: theme.cardBg,
+            border: `1px solid ${theme.border}`,
             borderRadius: '20px',
             padding: '20px',
           }}
         >
-          <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>Visible classes</p>
-          <h2 style={{ margin: '8px 0 0 0', fontSize: '28px', color: '#0f172a' }}>
+          <p style={{ margin: 0, fontSize: '12px', color: theme.mutedText }}>
+            Visible classes
+          </p>
+          <h2 style={{ margin: '8px 0 0 0', fontSize: '28px', color: theme.text }}>
             {visibleClassrooms.length}
           </h2>
         </div>
 
         <div
           style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
+            background: theme.cardBg,
+            border: `1px solid ${theme.border}`,
             borderRadius: '20px',
             padding: '20px',
           }}
         >
-          <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>Visible students</p>
-          <h2 style={{ margin: '8px 0 0 0', fontSize: '28px', color: '#0f172a' }}>
+          <p style={{ margin: 0, fontSize: '12px', color: theme.mutedText }}>
+            Visible students
+          </p>
+          <h2 style={{ margin: '8px 0 0 0', fontSize: '28px', color: theme.text }}>
             {visibleStudents.length}
           </h2>
         </div>
 
         <div
           style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
+            background: theme.cardBg,
+            border: `1px solid ${theme.border}`,
             borderRadius: '20px',
             padding: '20px',
           }}
         >
-          <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>Selected class</p>
+          <p style={{ margin: 0, fontSize: '12px', color: theme.mutedText }}>
+            Selected class
+          </p>
           <h2
             style={{
               margin: '8px 0 0 0',
               fontSize: '20px',
-              color: '#0f172a',
+              color: theme.text,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -151,16 +157,23 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
       >
         <div
           style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
+            background: theme.cardBg,
+            border: `1px solid ${theme.border}`,
             borderRadius: '24px',
             padding: '24px',
           }}
         >
-          <h2 style={{ marginTop: 0, marginBottom: '6px', color: '#0f172a' }}>
+          <h2 style={{ marginTop: 0, marginBottom: '6px', color: theme.text }}>
             Add student
           </h2>
-          <p style={{ marginTop: 0, marginBottom: '20px', color: '#64748b', fontSize: '14px' }}>
+          <p
+            style={{
+              marginTop: 0,
+              marginBottom: '20px',
+              color: theme.mutedText,
+              fontSize: '14px',
+            }}
+          >
             Add a student to the shared classroom list for this host app.
           </p>
 
@@ -173,7 +186,7 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
                   marginBottom: '6px',
                   fontSize: '14px',
                   fontWeight: 600,
-                  color: '#334155',
+                  color: theme.text,
                 }}
               >
                 Class
@@ -186,8 +199,9 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
                   width: '100%',
                   padding: '12px 14px',
                   borderRadius: '14px',
-                  border: '1px solid #cbd5e1',
-                  background: '#ffffff',
+                  border: `1px solid ${theme.border}`,
+                  background: theme.panelBg,
+                  color: theme.text,
                   boxSizing: 'border-box',
                 }}
               >
@@ -207,7 +221,7 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
                   marginBottom: '6px',
                   fontSize: '14px',
                   fontWeight: 600,
-                  color: '#334155',
+                  color: theme.text,
                 }}
               >
                 First name
@@ -221,7 +235,9 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
                   width: '100%',
                   padding: '12px 14px',
                   borderRadius: '14px',
-                  border: '1px solid #cbd5e1',
+                  border: `1px solid ${theme.border}`,
+                  background: theme.panelBg,
+                  color: theme.text,
                   boxSizing: 'border-box',
                 }}
               />
@@ -235,7 +251,7 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
                   marginBottom: '6px',
                   fontSize: '14px',
                   fontWeight: 600,
-                  color: '#334155',
+                  color: theme.text,
                 }}
               >
                 Last name
@@ -249,7 +265,9 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
                   width: '100%',
                   padding: '12px 14px',
                   borderRadius: '14px',
-                  border: '1px solid #cbd5e1',
+                  border: `1px solid ${theme.border}`,
+                  background: theme.panelBg,
+                  color: theme.text,
                   boxSizing: 'border-box',
                 }}
               />
@@ -275,8 +293,8 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
 
         <div
           style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
+            background: theme.cardBg,
+            border: `1px solid ${theme.border}`,
             borderRadius: '24px',
             padding: '24px',
           }}
@@ -292,10 +310,10 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
             }}
           >
             <div>
-              <h2 style={{ margin: 0, color: '#0f172a' }}>
+              <h2 style={{ margin: 0, color: theme.text }}>
                 {selectedClassroom?.name ?? 'Class list'}
               </h2>
-              <p style={{ margin: '6px 0 0 0', color: '#64748b', fontSize: '14px' }}>
+              <p style={{ margin: '6px 0 0 0', color: theme.mutedText, fontSize: '14px' }}>
                 Students in this class: {studentsForSelectedClass.length}
               </p>
             </div>
@@ -311,8 +329,8 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
               <div
                 key={student.id}
                 style={{
-                  background: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  background: theme.panelBg,
+                  border: `1px solid ${theme.border}`,
                   borderRadius: '16px',
                   padding: '14px 16px',
                 }}
@@ -320,7 +338,7 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
                 <div
                   style={{
                     fontWeight: 700,
-                    color: '#0f172a',
+                    color: theme.text,
                     marginBottom: '4px',
                   }}
                 >
@@ -329,7 +347,7 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
                 <div
                   style={{
                     fontSize: '13px',
-                    color: '#64748b',
+                    color: theme.mutedText,
                   }}
                 >
                   {selectedClassroom?.name ?? 'Classroom'}
@@ -340,11 +358,11 @@ export function DashboardHome({ schoolContext, onAddStudent }) {
             {studentsForSelectedClass.length === 0 && (
               <div
                 style={{
-                  background: '#f8fafc',
-                  border: '1px dashed #cbd5e1',
+                  background: theme.panelBg,
+                  border: `1px dashed ${theme.border}`,
                   borderRadius: '16px',
                   padding: '18px',
-                  color: '#64748b',
+                  color: theme.mutedText,
                 }}
               >
                 No students added yet.

@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
-import { Bell, Search, User } from 'lucide-react';
+import { Bell, Search, User, Moon, Sun } from 'lucide-react';
 
-export function AppHeader({ school, currentUser, users, onSwitchUser }) {
+export function AppHeader({
+  school,
+  currentUser,
+  users,
+  onSwitchUser,
+  isDarkMode,
+  onToggleDarkMode,
+  theme,
+}) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const prettyRole =
@@ -14,8 +22,8 @@ export function AppHeader({ school, currentUser, users, onSwitchUser }) {
   return (
     <header
       style={{
-        background: '#ffffff',
-        borderBottom: '1px solid #e2e8f0',
+        background: theme.panelBg,
+        borderBottom: `1px solid ${theme.border}`,
         padding: '16px 24px',
         position: 'sticky',
         top: 0,
@@ -39,7 +47,7 @@ export function AppHeader({ school, currentUser, users, onSwitchUser }) {
               fontWeight: 700,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              color: '#64748b',
+              color: theme.mutedText,
             }}
           >
             School Tool Hub
@@ -49,7 +57,7 @@ export function AppHeader({ school, currentUser, users, onSwitchUser }) {
             style={{
               margin: '6px 0 2px 0',
               fontSize: '24px',
-              color: '#0f172a',
+              color: theme.text,
             }}
           >
             {school?.name}
@@ -59,7 +67,7 @@ export function AppHeader({ school, currentUser, users, onSwitchUser }) {
             style={{
               margin: 0,
               fontSize: '14px',
-              color: '#475569',
+              color: theme.mutedText,
             }}
           >
             Signed in as {currentUser?.name} · {prettyRole}
@@ -80,14 +88,14 @@ export function AppHeader({ school, currentUser, users, onSwitchUser }) {
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
-              background: '#f8fafc',
-              border: '1px solid #e2e8f0',
+              background: theme.cardBg,
+              border: `1px solid ${theme.border}`,
               borderRadius: '999px',
               padding: '10px 14px',
               minWidth: '260px',
             }}
           >
-            <Search size={16} color="#64748b" />
+            <Search size={16} color={theme.mutedText} />
             <input
               type="text"
               value={searchQuery}
@@ -99,10 +107,33 @@ export function AppHeader({ school, currentUser, users, onSwitchUser }) {
                 background: 'transparent',
                 width: '100%',
                 fontSize: '14px',
-                color: '#0f172a',
+                color: theme.text,
               }}
             />
           </div>
+
+          <button
+            type="button"
+            onClick={onToggleDarkMode}
+            style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '999px',
+              border: `1px solid ${theme.border}`,
+              background: theme.cardBg,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+            }}
+            title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {isDarkMode ? (
+              <Sun size={18} color={theme.mutedText} />
+            ) : (
+              <Moon size={18} color={theme.mutedText} />
+            )}
+          </button>
 
           <button
             type="button"
@@ -110,15 +141,15 @@ export function AppHeader({ school, currentUser, users, onSwitchUser }) {
               width: '42px',
               height: '42px',
               borderRadius: '999px',
-              border: '1px solid #e2e8f0',
-              background: '#ffffff',
+              border: `1px solid ${theme.border}`,
+              background: theme.cardBg,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
             }}
           >
-            <Bell size={18} color="#475569" />
+            <Bell size={18} color={theme.mutedText} />
           </button>
 
           <div
@@ -126,8 +157,8 @@ export function AppHeader({ school, currentUser, users, onSwitchUser }) {
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
-              background: '#f8fafc',
-              border: '1px solid #e2e8f0',
+              background: theme.cardBg,
+              border: `1px solid ${theme.border}`,
               borderRadius: '14px',
               padding: '8px 10px',
             }}
@@ -137,13 +168,13 @@ export function AppHeader({ school, currentUser, users, onSwitchUser }) {
                 width: '34px',
                 height: '34px',
                 borderRadius: '999px',
-                background: '#e0f2fe',
+                background: theme.accentBg,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <User size={18} color="#0369a1" />
+              <User size={18} color={theme.text} />
             </div>
 
             <select
@@ -155,7 +186,7 @@ export function AppHeader({ school, currentUser, users, onSwitchUser }) {
                 background: 'transparent',
                 fontSize: '14px',
                 fontWeight: 600,
-                color: '#0f172a',
+                color: theme.text,
                 cursor: 'pointer',
               }}
             >

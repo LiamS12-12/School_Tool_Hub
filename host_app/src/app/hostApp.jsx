@@ -20,6 +20,7 @@ export default function HostApp() {
     loadStoredValue(HOST_APP_STORAGE_KEY, {
       currentUserId: 'teacher-1',
       activeModuleId: null,
+      isDarkMode: false,
     })
   );
 
@@ -27,7 +28,27 @@ export default function HostApp() {
   const [classrooms] = useState(initialClassrooms);
   const [students, setStudents] = useState(initialStudents);
 
-  const { currentUserId, activeModuleId } = persistedHostState;
+  const { currentUserId, activeModuleId, isDarkMode } = persistedHostState;
+
+  const theme = isDarkMode
+    ? {
+        pageBg: '#020617',
+        panelBg: '#0f172a',
+        cardBg: '#111827',
+        border: '#334155',
+        text: '#f8fafc',
+        mutedText: '#94a3b8',
+        accentBg: '#082f49',
+      }
+    : {
+        pageBg: '#f1f5f9',
+        panelBg: '#ffffff',
+        cardBg: '#ffffff',
+        border: '#e2e8f0',
+        text: '#0f172a',
+        mutedText: '#64748b',
+        accentBg: '#e0f2fe',
+      };
 
   const schoolContext = useMemo(
     () =>
@@ -56,6 +77,13 @@ export default function HostApp() {
     setPersistedHostState((prev) => ({
       ...prev,
       activeModuleId: nextModuleId,
+    }));
+  };
+
+  const toggleDarkMode = () => {
+    setPersistedHostState((prev) => ({
+      ...prev,
+      isDarkMode: !prev.isDarkMode,
     }));
   };
 
@@ -97,26 +125,52 @@ export default function HostApp() {
   const ActiveScreen = activeModule?.screen || DashboardHome;
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900">
+    <div
+      style={{
+        minHeight: '100vh',
+        background: theme.pageBg,
+        color: theme.text,
+      }}
+    >
       <AppHeader
         school={schoolContext.school}
         currentUser={schoolContext.currentUser}
         users={users}
         onSwitchUser={setCurrentUserId}
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={toggleDarkMode}
+        theme={theme}
       />
 
-      <div className="mx-auto flex max-w-7xl gap-6 px-6 py-6">
+      <div
+        style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          display: 'flex',
+          gap: '24px',
+          padding: '24px',
+        }}
+      >
         <AppSidebar
           modules={availableModules}
           activeModuleId={activeModuleId}
           onSelectModule={setActiveModuleId}
+          isDarkMode={isDarkMode}
+          theme={theme}
         />
 
-        <main className="min-w-0 flex-1">
+        <main
+          style={{
+            minWidth: 0,
+            flex: 1,
+          }}
+        >
           <AppShellPanel>
             <ActiveScreen
               schoolContext={schoolContext}
               onAddStudent={addStudentToClassroom}
+              isDarkMode={isDarkMode}
+              theme={theme}
             />
           </AppShellPanel>
         </main>

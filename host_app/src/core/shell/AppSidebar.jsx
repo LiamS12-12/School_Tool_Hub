@@ -21,7 +21,7 @@ function getModuleIcon(moduleId) {
   }
 }
 
-export function AppSidebar({ modules, activeModuleId, onSelectModule }) {
+export function AppSidebar({ modules, activeModuleId, onSelectModule, theme }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
@@ -35,8 +35,8 @@ export function AppSidebar({ modules, activeModuleId, onSelectModule }) {
     >
       <div
         style={{
-          background: '#ffffff',
-          border: '1px solid #e2e8f0',
+          background: theme.panelBg,
+          border: `1px solid ${theme.border}`,
           borderRadius: '20px',
           padding: '16px',
           position: 'sticky',
@@ -62,7 +62,7 @@ export function AppSidebar({ modules, activeModuleId, onSelectModule }) {
                   fontWeight: 700,
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
-                  color: '#64748b',
+                  color: theme.mutedText,
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -74,7 +74,7 @@ export function AppSidebar({ modules, activeModuleId, onSelectModule }) {
                 style={{
                   margin: '6px 0 0 0',
                   fontSize: '20px',
-                  color: '#0f172a',
+                  color: theme.text,
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -92,8 +92,8 @@ export function AppSidebar({ modules, activeModuleId, onSelectModule }) {
               width: '40px',
               height: '40px',
               borderRadius: '12px',
-              border: '1px solid #e2e8f0',
-              background: '#f8fafc',
+              border: `1px solid ${theme.border}`,
+              background: theme.cardBg,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -103,7 +103,7 @@ export function AppSidebar({ modules, activeModuleId, onSelectModule }) {
           >
             <ChevronLeft
               size={18}
-              color="#475569"
+              color={theme.mutedText}
               style={{
                 transform: isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)',
                 transition: 'transform 0.2s ease',
@@ -131,9 +131,12 @@ export function AppSidebar({ modules, activeModuleId, onSelectModule }) {
               padding: isCollapsed ? '14px 0' : '14px 16px',
               justifyContent: isCollapsed ? 'center' : 'flex-start',
               borderRadius: '16px',
-              border: activeModuleId === null ? '1px solid #0ea5e9' : '1px solid #e2e8f0',
-              background: activeModuleId === null ? '#e0f2fe' : '#ffffff',
-              color: '#0f172a',
+              border:
+                activeModuleId === null
+                  ? '1px solid #0ea5e9'
+                  : `1px solid ${theme.border}`,
+              background: activeModuleId === null ? theme.accentBg : theme.cardBg,
+              color: theme.text,
               cursor: 'pointer',
               fontWeight: 600,
               overflow: 'hidden',
@@ -174,9 +177,9 @@ export function AppSidebar({ modules, activeModuleId, onSelectModule }) {
                   padding: isCollapsed ? '14px 0' : '14px 16px',
                   justifyContent: isCollapsed ? 'center' : 'flex-start',
                   borderRadius: '16px',
-                  border: isActive ? '1px solid #0ea5e9' : '1px solid #e2e8f0',
-                  background: isActive ? '#e0f2fe' : '#ffffff',
-                  color: '#0f172a',
+                  border: isActive ? '1px solid #0ea5e9' : `1px solid ${theme.border}`,
+                  background: isActive ? theme.accentBg : theme.cardBg,
+                  color: theme.text,
                   cursor: 'pointer',
                   textAlign: 'left',
                   overflow: 'hidden',
@@ -202,6 +205,7 @@ export function AppSidebar({ modules, activeModuleId, onSelectModule }) {
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
+                        color: theme.text,
                       }}
                     >
                       {module.name}
@@ -209,7 +213,7 @@ export function AppSidebar({ modules, activeModuleId, onSelectModule }) {
                     <div
                       style={{
                         fontSize: '12px',
-                        color: '#64748b',
+                        color: theme.mutedText,
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',

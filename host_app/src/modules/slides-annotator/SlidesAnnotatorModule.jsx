@@ -10,7 +10,7 @@ import {
   Layers3,
 } from 'lucide-react';
 
-export function SlidesAnnotatorModule({ schoolContext }) {
+export function SlidesAnnotatorModule({ schoolContext, isDarkMode, theme }) {
   const visibleClassrooms = schoolContext?.visibleClassrooms ?? [];
   const visibleStudents = schoolContext?.visibleStudents ?? [];
   const currentUser = schoolContext?.currentUser ?? null;
@@ -79,12 +79,27 @@ export function SlidesAnnotatorModule({ schoolContext }) {
     { id: 'text', label: 'Text', icon: Type },
   ];
 
+  const heroBackground = isDarkMode
+    ? 'linear-gradient(135deg, #3f1d0f 0%, #3b1020 100%)'
+    : 'linear-gradient(135deg, #fff7ed 0%, #fff1f2 100%)';
+
+  const heroBorder = isDarkMode ? '#7c2d12' : '#fed7aa';
+  const heroLabel = isDarkMode ? '#fdba74' : '#9a3412';
+  const heroHeading = isDarkMode ? '#fff7ed' : '#431407';
+  const heroText = isDarkMode ? '#fed7aa' : '#7c2d12';
+
+  const slideCanvasBg = isDarkMode ? '#0b1220' : '#ffffff';
+  const lessonSurface = isDarkMode ? '#111827' : '#ffffff';
+  const lessonMutedSurface = isDarkMode ? '#1f2937' : '#f8fafc';
+  const lessonText = isDarkMode ? '#f8fafc' : '#0f172a';
+  const lessonMutedText = isDarkMode ? '#cbd5e1' : '#475569';
+
   return (
     <div style={{ padding: '8px' }}>
       <div
         style={{
-          background: 'linear-gradient(135deg, #fff7ed 0%, #fff1f2 100%)',
-          border: '1px solid #fed7aa',
+          background: heroBackground,
+          border: `1px solid ${heroBorder}`,
           borderRadius: '24px',
           padding: '28px',
           marginBottom: '24px',
@@ -97,7 +112,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
             fontWeight: 700,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: '#9a3412',
+            color: heroLabel,
           }}
         >
           Module Demo
@@ -107,7 +122,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
           style={{
             margin: '8px 0 10px 0',
             fontSize: '32px',
-            color: '#431407',
+            color: heroHeading,
           }}
         >
           Slides Annotator
@@ -117,7 +132,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
           style={{
             margin: 0,
             fontSize: '15px',
-            color: '#7c2d12',
+            color: heroText,
             maxWidth: '760px',
           }}
         >
@@ -137,36 +152,36 @@ export function SlidesAnnotatorModule({ schoolContext }) {
       >
         <div
           style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
+            background: theme.cardBg,
+            border: `1px solid ${theme.border}`,
             borderRadius: '20px',
             padding: '20px',
           }}
         >
-          <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>
+          <p style={{ margin: 0, fontSize: '12px', color: theme.mutedText }}>
             Active teacher
           </p>
-          <h2 style={{ margin: '8px 0 0 0', fontSize: '24px', color: '#0f172a' }}>
+          <h2 style={{ margin: '8px 0 0 0', fontSize: '24px', color: theme.text }}>
             {currentUser?.name ?? 'Unknown'}
           </h2>
         </div>
 
         <div
           style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
+            background: theme.cardBg,
+            border: `1px solid ${theme.border}`,
             borderRadius: '20px',
             padding: '20px',
           }}
         >
-          <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>
+          <p style={{ margin: 0, fontSize: '12px', color: theme.mutedText }}>
             Selected classroom
           </p>
           <h2
             style={{
               margin: '8px 0 0 0',
               fontSize: '22px',
-              color: '#0f172a',
+              color: theme.text,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -178,16 +193,16 @@ export function SlidesAnnotatorModule({ schoolContext }) {
 
         <div
           style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
+            background: theme.cardBg,
+            border: `1px solid ${theme.border}`,
             borderRadius: '20px',
             padding: '20px',
           }}
         >
-          <p style={{ margin: 0, fontSize: '12px', color: '#64748b' }}>
+          <p style={{ margin: 0, fontSize: '12px', color: theme.mutedText }}>
             Students in roster
           </p>
-          <h2 style={{ margin: '8px 0 0 0', fontSize: '28px', color: '#0f172a' }}>
+          <h2 style={{ margin: '8px 0 0 0', fontSize: '28px', color: theme.text }}>
             {studentsForClassroom.length}
           </h2>
         </div>
@@ -209,8 +224,8 @@ export function SlidesAnnotatorModule({ schoolContext }) {
         >
           <div
             style={{
-              background: '#ffffff',
-              border: '1px solid #e2e8f0',
+              background: theme.cardBg,
+              border: `1px solid ${theme.border}`,
               borderRadius: '24px',
               padding: '24px',
             }}
@@ -224,7 +239,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
               }}
             >
               <MonitorPlay size={20} color="#ea580c" />
-              <h2 style={{ margin: 0, color: '#0f172a' }}>Presentation setup</h2>
+              <h2 style={{ margin: 0, color: theme.text }}>Presentation setup</h2>
             </div>
 
             <div style={{ marginBottom: '16px' }}>
@@ -235,7 +250,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                   marginBottom: '6px',
                   fontSize: '14px',
                   fontWeight: 600,
-                  color: '#334155',
+                  color: theme.text,
                 }}
               >
                 Class
@@ -252,8 +267,9 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                   width: '100%',
                   padding: '12px 14px',
                   borderRadius: '14px',
-                  border: '1px solid #cbd5e1',
-                  background: '#ffffff',
+                  border: `1px solid ${theme.border}`,
+                  background: theme.panelBg,
+                  color: theme.text,
                   boxSizing: 'border-box',
                 }}
               >
@@ -273,32 +289,32 @@ export function SlidesAnnotatorModule({ schoolContext }) {
             >
               <div
                 style={{
-                  background: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  background: theme.panelBg,
+                  border: `1px solid ${theme.border}`,
                   borderRadius: '16px',
                   padding: '14px 16px',
                 }}
               >
-                <div style={{ fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>
+                <div style={{ fontWeight: 700, color: theme.text, marginBottom: '4px' }}>
                   Slide deck
                 </div>
-                <div style={{ fontSize: '13px', color: '#64748b' }}>
+                <div style={{ fontSize: '13px', color: theme.mutedText }}>
                   Connected to the host demo presentation area
                 </div>
               </div>
 
               <div
                 style={{
-                  background: '#f8fafc',
-                  border: '1px solid #e2e8f0',
+                  background: theme.panelBg,
+                  border: `1px solid ${theme.border}`,
                   borderRadius: '16px',
                   padding: '14px 16px',
                 }}
               >
-                <div style={{ fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>
+                <div style={{ fontWeight: 700, color: theme.text, marginBottom: '4px' }}>
                   Shared roster
                 </div>
-                <div style={{ fontSize: '13px', color: '#64748b' }}>
+                <div style={{ fontSize: '13px', color: theme.mutedText }}>
                   Using the same class list from the host app home page
                 </div>
               </div>
@@ -307,8 +323,8 @@ export function SlidesAnnotatorModule({ schoolContext }) {
 
           <div
             style={{
-              background: '#ffffff',
-              border: '1px solid #e2e8f0',
+              background: theme.cardBg,
+              border: `1px solid ${theme.border}`,
               borderRadius: '24px',
               padding: '24px',
             }}
@@ -322,7 +338,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
               }}
             >
               <Users size={20} color="#0ea5e9" />
-              <h2 style={{ margin: 0, color: '#0f172a' }}>Class roster preview</h2>
+              <h2 style={{ margin: 0, color: theme.text }}>Class roster preview</h2>
             </div>
 
             <div style={{ display: 'grid', gap: '10px' }}>
@@ -330,16 +346,16 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                 <div
                   key={student.id}
                   style={{
-                    background: '#f8fafc',
-                    border: '1px solid #e2e8f0',
+                    background: theme.panelBg,
+                    border: `1px solid ${theme.border}`,
                     borderRadius: '16px',
                     padding: '12px 14px',
                   }}
                 >
-                  <div style={{ fontWeight: 700, color: '#0f172a' }}>
+                  <div style={{ fontWeight: 700, color: theme.text }}>
                     {student.firstName} {student.lastName}
                   </div>
-                  <div style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
+                  <div style={{ fontSize: '13px', color: theme.mutedText, marginTop: '4px' }}>
                     {selectedClassroom?.name ?? 'Classroom'}
                   </div>
                 </div>
@@ -348,11 +364,11 @@ export function SlidesAnnotatorModule({ schoolContext }) {
               {studentsForClassroom.length === 0 && (
                 <div
                   style={{
-                    background: '#f8fafc',
-                    border: '1px dashed #cbd5e1',
+                    background: theme.panelBg,
+                    border: `1px dashed ${theme.border}`,
                     borderRadius: '16px',
                     padding: '16px',
-                    color: '#64748b',
+                    color: theme.mutedText,
                   }}
                 >
                   No students available for this classroom yet.
@@ -364,8 +380,8 @@ export function SlidesAnnotatorModule({ schoolContext }) {
 
         <div
           style={{
-            background: '#ffffff',
-            border: '1px solid #e2e8f0',
+            background: theme.cardBg,
+            border: `1px solid ${theme.border}`,
             borderRadius: '24px',
             padding: '24px',
           }}
@@ -381,8 +397,8 @@ export function SlidesAnnotatorModule({ schoolContext }) {
             }}
           >
             <div>
-              <h2 style={{ margin: 0, color: '#0f172a' }}>Annotation workspace</h2>
-              <p style={{ margin: '6px 0 0 0', color: '#64748b', fontSize: '14px' }}>
+              <h2 style={{ margin: 0, color: theme.text }}>Annotation workspace</h2>
+              <p style={{ margin: '6px 0 0 0', color: theme.mutedText, fontSize: '14px' }}>
                 A polished preview of how a teaching presentation tool could live
                 inside the host app.
               </p>
@@ -417,9 +433,9 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                       gap: '8px',
                       padding: '10px 12px',
                       borderRadius: '14px',
-                      border: isActive ? '1px solid #f97316' : '1px solid #e2e8f0',
-                      background: isActive ? '#fff7ed' : '#ffffff',
-                      color: '#0f172a',
+                      border: isActive ? '1px solid #f97316' : `1px solid ${theme.border}`,
+                      background: isActive ? '#fff7ed' : theme.panelBg,
+                      color: isActive ? '#9a3412' : theme.text,
                       cursor: 'pointer',
                       fontWeight: 600,
                     }}
@@ -434,8 +450,8 @@ export function SlidesAnnotatorModule({ schoolContext }) {
 
           <div
             style={{
-              background: '#f8fafc',
-              border: '1px solid #e2e8f0',
+              background: theme.panelBg,
+              border: `1px solid ${theme.border}`,
               borderRadius: '20px',
               padding: '18px',
               marginBottom: '18px',
@@ -451,10 +467,10 @@ export function SlidesAnnotatorModule({ schoolContext }) {
               }}
             >
               <div>
-                <div style={{ fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>
+                <div style={{ fontWeight: 700, color: theme.text, marginBottom: '4px' }}>
                   Live session
                 </div>
-                <div style={{ fontSize: '13px', color: '#64748b' }}>
+                <div style={{ fontSize: '13px', color: theme.mutedText }}>
                   {currentUser?.name} presenting to {selectedClassroom?.name ?? 'class'}
                 </div>
               </div>
@@ -465,7 +481,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                   alignItems: 'center',
                   gap: '10px',
                   fontSize: '13px',
-                  color: '#64748b',
+                  color: theme.mutedText,
                 }}
               >
                 <Layers3 size={16} />
@@ -480,25 +496,25 @@ export function SlidesAnnotatorModule({ schoolContext }) {
               minHeight: '560px',
               borderRadius: '24px',
               overflow: 'hidden',
-              border: '1px solid #cbd5e1',
-              background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
+              border: `1px solid ${theme.border}`,
+              background: slideCanvasBg,
             }}
           >
             <div
               style={{
                 height: '52px',
-                borderBottom: '1px solid #e2e8f0',
-                background: '#ffffff',
+                borderBottom: `1px solid ${theme.border}`,
+                background: theme.cardBg,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '0 18px',
               }}
             >
-              <div style={{ fontWeight: 700, color: '#0f172a' }}>
+              <div style={{ fontWeight: 700, color: theme.text }}>
                 Math Lesson Deck
               </div>
-              <div style={{ fontSize: '13px', color: '#64748b' }}>
+              <div style={{ fontSize: '13px', color: theme.mutedText }}>
                 Slide 4 of 18
               </div>
             </div>
@@ -514,8 +530,8 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                 style={{
                   height: '100%',
                   borderRadius: '20px',
-                  background: '#ffffff',
-                  border: '1px solid #e2e8f0',
+                  background: lessonSurface,
+                  border: `1px solid ${theme.border}`,
                   position: 'relative',
                   overflow: 'hidden',
                 }}
@@ -532,7 +548,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                     style={{
                       fontSize: '14px',
                       fontWeight: 700,
-                      color: '#0ea5e9',
+                      color: '#38bdf8',
                       letterSpacing: '0.06em',
                       textTransform: 'uppercase',
                       marginBottom: '14px',
@@ -545,7 +561,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                     style={{
                       margin: '0 0 12px 0',
                       fontSize: '34px',
-                      color: '#0f172a',
+                      color: lessonText,
                       maxWidth: '720px',
                     }}
                   >
@@ -556,7 +572,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                     style={{
                       margin: '0 0 26px 0',
                       maxWidth: '700px',
-                      color: '#475569',
+                      color: lessonMutedText,
                       fontSize: '16px',
                       lineHeight: 1.6,
                     }}
@@ -577,8 +593,8 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                       <div
                         key={fraction}
                         style={{
-                          background: '#f8fafc',
-                          border: '1px solid #e2e8f0',
+                          background: lessonMutedSurface,
+                          border: `1px solid ${theme.border}`,
                           borderRadius: '18px',
                           padding: '20px',
                           textAlign: 'center',
@@ -588,7 +604,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                           style={{
                             fontSize: '28px',
                             fontWeight: 800,
-                            color: '#0f172a',
+                            color: lessonText,
                             marginBottom: '10px',
                           }}
                         >
@@ -598,7 +614,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                           style={{
                             height: '14px',
                             borderRadius: '999px',
-                            background: '#e2e8f0',
+                            background: isDarkMode ? '#334155' : '#e2e8f0',
                             overflow: 'hidden',
                           }}
                         >
@@ -624,7 +640,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                       border: '2px solid #fb923c',
                       borderRadius: '18px',
                       padding: '16px',
-                      color: '#9a3412',
+                      color: isDarkMode ? '#fdba74' : '#9a3412',
                       fontWeight: 700,
                       transform: 'rotate(-3deg)',
                     }}
@@ -639,7 +655,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                         left: '36px',
                         top: '140px',
                         width: '260px',
-                        background: '#eff6ff',
+                        background: isDarkMode ? '#082f49' : '#eff6ff',
                         border: '3px solid #0ea5e9',
                         borderRadius: '20px',
                         padding: '18px',
@@ -653,7 +669,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                           fontWeight: 800,
                           letterSpacing: '0.08em',
                           textTransform: 'uppercase',
-                          color: '#0284c7',
+                          color: '#38bdf8',
                           marginBottom: '8px',
                         }}
                       >
@@ -664,7 +680,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                         style={{
                           fontSize: '22px',
                           fontWeight: 800,
-                          color: '#0f172a',
+                          color: isDarkMode ? '#f8fafc' : '#0f172a',
                           marginBottom: '6px',
                         }}
                       >
@@ -674,7 +690,7 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                       <div
                         style={{
                           fontSize: '13px',
-                          color: '#64748b',
+                          color: isDarkMode ? '#cbd5e1' : '#64748b',
                         }}
                       >
                         {selectedClassroom?.name ?? 'Classroom'}
@@ -689,11 +705,11 @@ export function SlidesAnnotatorModule({ schoolContext }) {
                         left: '36px',
                         top: '140px',
                         width: '260px',
-                        background: '#fff7ed',
+                        background: isDarkMode ? '#3f1d0f' : '#fff7ed',
                         border: '2px dashed #fb923c',
                         borderRadius: '20px',
                         padding: '18px',
-                        color: '#9a3412',
+                        color: isDarkMode ? '#fdba74' : '#9a3412',
                         fontWeight: 700,
                         zIndex: 5,
                       }}

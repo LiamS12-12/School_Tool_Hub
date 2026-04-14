@@ -1,18 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button } from '../../shared/ui/Button';
-import { Card } from '../../shared/ui/Card';
-import { SectionHeader } from '../../shared/ui/SectionHeader';
 
 const PRESET_MINUTES = [1, 5, 10, 15];
 
 function formatSeconds(totalSeconds) {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
-  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  return `${minutes.toString().padStart(2, '0')}:${seconds
+    .toString()
+    .padStart(2, '0')}`;
 }
 
-export function ClassroomTimerModule({ schoolContext }) {
-  const defaultClassroomName = schoolContext.visibleClassrooms[0]?.name || 'Current Classroom';
+export function ClassroomTimerModule({ schoolContext, theme }) {
+  const defaultClassroomName =
+    schoolContext.visibleClassrooms[0]?.name || 'Current Classroom';
+
   const [durationSeconds, setDurationSeconds] = useState(5 * 60);
   const [remainingSeconds, setRemainingSeconds] = useState(5 * 60);
   const [isRunning, setIsRunning] = useState(false);
@@ -59,67 +60,199 @@ export function ClassroomTimerModule({ schoolContext }) {
     setIsRunning(false);
   };
 
+  const buttonStyle = (primary = false, disabled = false) => ({
+    padding: '12px 16px',
+    borderRadius: '14px',
+    border: primary ? '1px solid #0ea5e9' : `1px solid ${theme.border}`,
+    background: disabled
+      ? theme.panelBg
+      : primary
+        ? '#0ea5e9'
+        : theme.panelBg,
+    color: disabled ? theme.mutedText : primary ? '#ffffff' : theme.text,
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    fontWeight: 700,
+    fontSize: '14px',
+    opacity: disabled ? 0.6 : 1,
+  });
+
+  const panelStyle = {
+    background: theme.cardBg,
+    border: `1px solid ${theme.border}`,
+    borderRadius: '24px',
+    padding: '24px',
+  };
+
   return (
-    <div className="space-y-6">
-      <SectionHeader
-        eyebrow="Module"
-        title="Classroom Timer"
-        description="A lightweight second app inside the host. This proves the platform can hold multiple tools while keeping a shared look and structure."
-      />
+    <div style={{ display: 'grid', gap: '24px', padding: '8px' }}>
+      <div
+        style={{
+          background: theme.cardBg,
+          border: `1px solid ${theme.border}`,
+          borderRadius: '24px',
+          padding: '28px',
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            fontSize: '12px',
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: theme.mutedText,
+          }}
+        >
+          Module
+        </p>
+        <h1
+          style={{
+            margin: '8px 0 10px 0',
+            fontSize: '32px',
+            color: theme.text,
+          }}
+        >
+          Classroom Timer
+        </h1>
+        <p
+          style={{
+            margin: 0,
+            fontSize: '15px',
+            color: theme.mutedText,
+            maxWidth: '760px',
+          }}
+        >
+          A lightweight second app inside the host. This proves the platform can
+          hold multiple tools while keeping a shared look and structure.
+        </p>
+      </div>
 
-      <Card className="bg-slate-50">
-        <h3 className="text-lg font-bold text-slate-900">Current classroom</h3>
-        <p className="mt-2 text-sm text-slate-600">{defaultClassroomName}</p>
-      </Card>
+      <div style={panelStyle}>
+        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: theme.text }}>
+          Current classroom
+        </h3>
+        <p style={{ margin: '8px 0 0 0', fontSize: '14px', color: theme.mutedText }}>
+          {defaultClassroomName}
+        </p>
+      </div>
 
-      <Card>
-        <div className="text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Countdown</p>
-          <p className="mt-4 text-7xl font-extrabold tracking-tight text-slate-900">{timerLabel}</p>
-          <p className="mt-3 text-sm text-slate-600">
-            {isRunning ? 'Timer is running' : remainingSeconds === 0 ? 'Time is up' : 'Timer is paused'}
+      <div style={panelStyle}>
+        <div style={{ textAlign: 'center' }}>
+          <p
+            style={{
+              margin: 0,
+              fontSize: '12px',
+              fontWeight: 700,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: theme.mutedText,
+            }}
+          >
+            Countdown
+          </p>
+          <p
+            style={{
+              margin: '16px 0 0 0',
+              fontSize: '72px',
+              fontWeight: 800,
+              letterSpacing: '-0.04em',
+              color: theme.text,
+            }}
+          >
+            {timerLabel}
+          </p>
+          <p style={{ margin: '12px 0 0 0', fontSize: '14px', color: theme.mutedText }}>
+            {isRunning
+              ? 'Timer is running'
+              : remainingSeconds === 0
+                ? 'Time is up'
+                : 'Timer is paused'}
           </p>
         </div>
 
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button onClick={() => setIsRunning(true)} variant="primary" disabled={remainingSeconds === 0 || isRunning}>
+        <div
+          style={{
+            marginTop: '32px',
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: '12px',
+          }}
+        >
+          <button
+            onClick={() => setIsRunning(true)}
+            disabled={remainingSeconds === 0 || isRunning}
+            style={buttonStyle(true, remainingSeconds === 0 || isRunning)}
+          >
             Start
-          </Button>
-          <Button onClick={() => setIsRunning(false)} variant="secondary" disabled={!isRunning}>
+          </button>
+          <button
+            onClick={() => setIsRunning(false)}
+            disabled={!isRunning}
+            style={buttonStyle(false, !isRunning)}
+          >
             Pause
-          </Button>
-          <Button onClick={resetTimer} variant="secondary">
+          </button>
+          <button onClick={resetTimer} style={buttonStyle(false, false)}>
             Reset
-          </Button>
+          </button>
         </div>
-      </Card>
+      </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <h3 className="text-lg font-bold text-slate-900">Quick presets</h3>
-          <div className="mt-4 flex flex-wrap gap-3">
+      <div
+        style={{
+          display: 'grid',
+          gap: '16px',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+        }}
+      >
+        <div style={panelStyle}>
+          <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: theme.text }}>
+            Quick presets
+          </h3>
+          <div
+            style={{
+              marginTop: '16px',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '12px',
+            }}
+          >
             {PRESET_MINUTES.map((minutes) => (
-              <Button key={minutes} onClick={() => setTimerMinutes(minutes)} variant="secondary">
+              <button
+                key={minutes}
+                onClick={() => setTimerMinutes(minutes)}
+                style={buttonStyle(false, false)}
+              >
                 {minutes} min
-              </Button>
+              </button>
             ))}
           </div>
-        </Card>
+        </div>
 
-        <Card>
-          <h3 className="text-lg font-bold text-slate-900">Adjust duration</h3>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Button onClick={() => adjustMinutes(-1)} variant="secondary">
+        <div style={panelStyle}>
+          <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: theme.text }}>
+            Adjust duration
+          </h3>
+          <div
+            style={{
+              marginTop: '16px',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '12px',
+            }}
+          >
+            <button onClick={() => adjustMinutes(-1)} style={buttonStyle(false, false)}>
               -1 min
-            </Button>
-            <Button onClick={() => adjustMinutes(1)} variant="secondary">
+            </button>
+            <button onClick={() => adjustMinutes(1)} style={buttonStyle(false, false)}>
               +1 min
-            </Button>
-            <Button onClick={() => adjustMinutes(5)} variant="secondary">
+            </button>
+            <button onClick={() => adjustMinutes(5)} style={buttonStyle(false, false)}>
               +5 min
-            </Button>
+            </button>
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );

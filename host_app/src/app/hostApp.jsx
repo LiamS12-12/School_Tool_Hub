@@ -165,7 +165,7 @@ export default function HostApp() {
             flex: 1,
           }}
         >
-          <AppShellPanel>
+          <AppShellPanel theme={theme}>
             <ActiveScreen
               schoolContext={schoolContext}
               onAddStudent={addStudentToClassroom}

@@ -26,14 +26,14 @@ export const initialUsers = [
     name: 'Principal Chen',
     role: ROLE_ADMIN,
     email: 'chen@evergreen-elementary.edu',
-    enabledModules: ['classroom-economy', 'classroom-timer', 'slides-annotator'],
+    enabledModules: ['classroom-economy', 'classroom-timer', 'slides-annotator', 'group-maker']
   }),
   createUser({
     id: 'teacher-1',
     name: 'Mr. Eccles',
     role: ROLE_TEACHER,
     email: 'eccles@evergreen-elementary.edu',
-    enabledModules: ['classroom-economy', 'classroom-timer', 'slides-annotator'],
+    enabledModules: ['classroom-economy', 'classroom-timer', 'slides-annotator', 'group-maker'],
     defaultClassroomId: 'class-1',
   }),
   createUser({
@@ -41,7 +41,7 @@ export const initialUsers = [
     name: 'Mr. Patel',
     role: ROLE_TEACHER,
     email: 'patel@evergreen-elementary.edu',
-    enabledModules: ['classroom-timer'],
+    enabledModules: ['classroom-timer', 'group-maker'],
     defaultClassroomId: 'class-2',
   }),
 ];
